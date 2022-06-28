@@ -4,7 +4,7 @@ import csv
 from cs50 import SQL
 
 # Create SQL connection
-open("sales.db", "w").close()
+open("project.db", "w").close()
 db = SQL("sqlite:///sales.db")
 
 def load(filename):
@@ -62,3 +62,16 @@ CREATE TABLE users (
                    purchaser_email, sale_date)
                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""", id, first_name, last_name, confirmation, package, paid, purchaser_name,
                    purchaser_email, sale_date)
+
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
