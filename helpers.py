@@ -3,7 +3,7 @@ import os
 
 import csv
 from cs50 import SQL
-from flask import redirect, session
+from flask import redirect, session, render_template
 from functools import wraps
 
 # Create SQL connection
@@ -27,7 +27,7 @@ def load(filename):
     
     # Create table
     db.execute("""
-CREATE TABLE users (
+CREATE TABLE customers (
                 student_id TEXT,
                 first_name TEXT,     
                 last_name TEXT,      
@@ -39,10 +39,10 @@ CREATE TABLE users (
                 sale_date TEXT NOT NULL       
         )
                """)
-    db.execute("CREATE INDEX id ON users (student_id)")
-    db.execute("CREATE INDEX package ON users (package)")
-    db.execute("CREATE INDEX purchaser_name ON users (purchaser_name)")
-    db.execute("CREATE INDEX purchaser_email ON users (purchaser_email)")
+    db.execute("CREATE INDEX id ON customers (student_id)")
+    db.execute("CREATE INDEX package ON customers (package)")
+    db.execute("CREATE INDEX purchaser_name ON customers (purchaser_name)")
+    db.execute("CREATE INDEX purchaser_email ON customers (purchaser_email)")
     
     # Pop headers out of dict
     rows.pop(0)
@@ -61,7 +61,7 @@ CREATE TABLE users (
         purchaser_email = row["Purchaser Email"].strip()
         sale_date = row["Sale Date"].strip()
         
-        db.execute("""INSERT INTO users (student_id, first_name, last_name, confirmation, package, paid, purchaser_name,
+        db.execute("""INSERT INTO customers (student_id, first_name, last_name, confirmation, package, paid, purchaser_name,
                    purchaser_email, sale_date)
                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""", id, first_name, last_name, confirmation, package, paid, purchaser_name,
                    purchaser_email, sale_date)
@@ -80,3 +80,17 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
+
+def apology(message, code=400):
+    """Render message as an apology to user."""
+    def escape(s):
+        """
+        Escape special characters.
+
+        https://github.com/jacebrowning/memegen#special-characters
+        """
+        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
+                         ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
+            s = s.replace(old, new)
+        return s
+    return render_template("apology.html", top=code, bottom=escape(message)), code
