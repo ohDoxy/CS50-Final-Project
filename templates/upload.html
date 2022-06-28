@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Upload
+{% endblock %}
+
+{% block main %}
+    <p>Click on "Choose File" and upload data as a CSV File.</p>
+    <form action="/upload" method="post">
+        <input type="file" name="file">
+        <button class="btn btn-primary" type="submit">Upload</button>
+    </form>
+{% endblock %}

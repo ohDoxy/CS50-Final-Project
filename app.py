@@ -35,7 +35,12 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
-    return render_template("index.html")
+    """ Welcome user """
+    
+    rows = db.execute("SELECT * FROM users WHERE id = ?", session["user_id"])
+    first_name = rows[0]["first_name"]
+    
+    return render_template("index.html", first_name=first_name)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -130,9 +135,17 @@ def register():
 
         # Hash the password and insert data into database
         hash = generate_password_hash(password)
-        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, hash)
+        db.execute("INSERT INTO users (first_name, last_name, email, username, hash) VALUES(?, ?, ?, ?, ?)", 
+                   first_name, last_name, email, username, hash)
 
         return redirect("/")
 
     # If get, return the template
     return render_template("register.html")
+
+@app.route("/upload", methods=["GET", "POST"])
+@login_required
+def upload():
+    """ Accept a CSV file and upload data """
+    
+    return render_template("upload.html")
