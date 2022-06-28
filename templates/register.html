@@ -7,7 +7,16 @@
 {% block main %}
     <form action="/register" method="post">
         <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="first-name" placeholder="First Name" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="username" name="last-name" placeholder="Last Name" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="username" name="email" placeholder="Email" type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
         </div>
         <div class="mb-3">
             <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">

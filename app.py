@@ -1,4 +1,5 @@
 import os
+from re import A
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -91,9 +92,22 @@ def register():
     # Check to see if user accesses by form
     if request.method == "POST":
         # Initialize all field values
+        first_name = request.form.get("first-name")
+        last_name = request.form.get("last-name")
+        email = request.form.get("email")
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
+        
+        # Check for vacant fields
+        if not first_name:
+            return apology("must provide first name")
+        
+        if not last_name:
+            return apology("must provide last name")
+        
+        if not email:
+            return apology("must provide email")
 
         # Check if there is a username and password
         if not username or not password:
@@ -102,6 +116,11 @@ def register():
         # Check to see if confirmation password match
         if password != confirmation:
             return apology("passwords do not match")
+        
+        # Check to see if email is already used
+        rows = db.execute("SELECT * FROM users WHERE email = ?", email)
+        if len(rows) != 0:
+            return apology("email already in use")
 
         # Check to see if username already exists
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
