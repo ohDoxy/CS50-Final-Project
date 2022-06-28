@@ -1,11 +1,14 @@
 """ HELPER FUNCTIONS FOR MAIN """
+import os
 
 import csv
 from cs50 import SQL
+from flask import redirect, session
+from functools import wraps
 
 # Create SQL connection
 open("project.db", "w").close()
-db = SQL("sqlite:///sales.db")
+db = SQL("sqlite:///project.db")
 
 def load(filename):
     """ LOAD CSV FILE INTO DATABASE """
@@ -62,6 +65,8 @@ CREATE TABLE users (
                    purchaser_email, sale_date)
                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""", id, first_name, last_name, confirmation, package, paid, purchaser_name,
                    purchaser_email, sale_date)
+
+
 
 def login_required(f):
     """
