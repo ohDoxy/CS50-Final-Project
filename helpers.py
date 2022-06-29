@@ -57,7 +57,6 @@ CREATE TABLE customers (
     # Pop headers out of dict
     rows.pop(0)
     
-    count = 0
     # Store data in SQL table
     for row in rows:
         
@@ -70,18 +69,13 @@ CREATE TABLE customers (
         package = row.get("Display Name", "NULL").strip()
         paid = row.get("Amount Paid", "NULL").strip()
         purchaser_name = row.get("Purchaser Name", "NULL").strip()
-        purchaser_email = "finsully04@gmail.com" # row.get("Purchaser Email", "NULL").strip()
+        purchaser_email = row.get("Purchaser Email", "NULL").strip()
         sale_date = row.get("Sale Date", "NULL").strip()
         
         db.execute("""INSERT INTO customers (student_id, first_name, last_name, confirmation, package, paid, purchaser_name,
                    purchaser_email, sale_date)
                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""", id, first_name, last_name, confirmation, package, paid, purchaser_name,
                    purchaser_email, sale_date)
-        
-        count += 1
-        
-        if count > 5:
-            break
 
 
 
@@ -124,8 +118,8 @@ def send_emails():
         # Setup list of recievers (purchaser and student)
         purchaser_email = row["purchaser_email"]
         student_id = row["student_id"]
-        #student_email = f"{student_id}@lcps.org"
-        recievers = [purchaser_email]
+        student_email = f"{student_id}@lcps.org"
+        recievers = [purchaser_email, student_email]
         
         # Setup email connection
         msg = EmailMessage()
