@@ -7,7 +7,6 @@ from flask import redirect, session, render_template
 from functools import wraps
 
 # Create SQL connection
-open("project.db", "w").close()
 db = SQL("sqlite:///project.db")
 
 def load(filename):
@@ -24,6 +23,8 @@ def load(filename):
             rows.append(row)
         
         file.close()
+        
+    db.execute("DROP TABLE IF EXISTS customers")
     
     # Create table
     db.execute("""
@@ -59,7 +60,7 @@ CREATE TABLE customers (
         package = row.get("Display Name", "NULL").strip()
         paid = row.get("Amount Paid", "NULL").strip()
         purchaser_name = row.get("Purchaser Name", "NULL").strip()
-        purchaser_email = row.get("Purchaser Email", "NULL").strip()
+        purchaser_email = "finsully04@gmail.com" # row.get("Purchaser Email", "NULL").strip()
         sale_date = row.get("Sale Date", "NULL").strip()
         
         db.execute("""INSERT INTO customers (student_id, first_name, last_name, confirmation, package, paid, purchaser_name,

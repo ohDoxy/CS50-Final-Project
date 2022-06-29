@@ -6,16 +6,20 @@
 
 {% block main %}
 
-<!-- <script>
+<script>
 
     function func() 
     {
         let img = document.querySelector("#loadingImage");
+        let msg = document.querySelector("#message");
+        let followUp = document.querySelector("#follow-up");
 
         img.style.display = "block";
+        msg.style.display = "block";
+        followUp.style.display = "block";
     }
 
-</script> -->
+</script>
 
 <p>
  Click on "Choose File" and upload data as a
@@ -30,5 +34,7 @@
   Upload
  </button>
 </form>
-<!-- <div class="loader" id="loadingImage"></div> -->
+<div class="loader" id="loadingImage"></div>
+<div id="message">Uploading File...</div>
+<div id="follow-up">This may take a moment.</div>
 {% endblock %}
