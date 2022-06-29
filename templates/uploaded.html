@@ -5,12 +5,32 @@
 {% endblock %}
 
 {% block main %}
+
+<script>
+
+    function func() 
+    {
+        let img = document.querySelector("#loadingImage");
+        let msg = document.querySelector("#message");
+        let followUp = document.querySelector("#follow-up");
+
+        img.style.display = "block";
+        msg.style.display = "block";
+        followUp.style.display = "block";
+    }
+
+</script>
+
+
     <div class="alert alert-success" role="alert">
         Successfully uploaded {{ file }}!
     </div>
 
     <form action="/manage" method="get">
         <button class="btn btn-primary" type="submit" name="action" value="change">Change File</button>
-        <button class="btn btn-primary" type="submit" name="action" value="send">Send QR Codes (via Email)</button>
+        <button class="btn btn-primary" type="submit" name="action" value="send" onclick="func()">Send Emails</button>
     </form>
+    <div class="loader" id="loadingImage"></div>
+    <div id="message">Sending Emails...</div>
+    <div id="follow-up">This may take a moment.</div>
 {% endblock %}

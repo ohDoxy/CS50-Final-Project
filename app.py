@@ -7,7 +7,7 @@ from flask_session import Session
 from requests import Response
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import load, login_required, apology
+from helpers import load, login_required, apology, send_emails
 
 # Conifgure application
 app = Flask(__name__)
@@ -172,7 +172,7 @@ def upload():
         
         return render_template("uploaded.html", file=file)
     
-    return render_template("uploaded.html")
+    return render_template("upload.html")
 
 @app.route("/manage")
 @login_required
@@ -183,7 +183,8 @@ def manage():
     
     if action == "change":
         return redirect("/upload")
-    else:
-        pass
     
-    return apology("TODO")
+    elif action == "send":
+        send_emails()
+    
+    return render_template("manage.html")

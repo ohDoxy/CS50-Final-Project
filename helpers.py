@@ -1,11 +1,18 @@
 """ HELPER FUNCTIONS FOR MAIN """
+
 import os
 import csv
 import qrcode
+import smtplib
+import imghdr
 
 from cs50 import SQL
 from flask import redirect, session, render_template
 from functools import wraps
+from email.message import EmailMessage
+
+EMAIL = os.environ.get("EMAIL")
+PASSWORD = os.environ.get("EMAIL_PASS")
 
 # Create SQL connection
 db = SQL("sqlite:///project.db")
@@ -50,6 +57,7 @@ CREATE TABLE customers (
     # Pop headers out of dict
     rows.pop(0)
     
+    count = 0
     # Store data in SQL table
     for row in rows:
         
@@ -69,6 +77,11 @@ CREATE TABLE customers (
                    purchaser_email, sale_date)
                    VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)""", id, first_name, last_name, confirmation, package, paid, purchaser_name,
                    purchaser_email, sale_date)
+        
+        count += 1
+        
+        if count > 5:
+            break
 
 
 
@@ -100,5 +113,45 @@ def apology(message, code=400):
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
 
-def generate_qr_codes():
-    pass
+def send_emails():
+    """ Send emails of information """
+    
+    # SQL Query for database
+    rows = db.execute("SELECT * FROM customers")
+    
+    for row in rows:
+        
+        # Setup list of recievers (purchaser and student)
+        purchaser_email = row["purchaser_email"]
+        student_id = row["student_id"]
+        #student_email = f"{student_id}@lcps.org"
+        recievers = [purchaser_email]
+        
+        # Setup email connection
+        msg = EmailMessage()
+        msg["Subject"] = "Purchased Yearbook Information"
+        msg["From"] = EMAIL
+        msg["To"] = recievers
+        
+        # Construct message
+        msg.set_content(f"""Dear yearbook purchaser,
+                        
+Below is the information of the yearbook you have purhcased. Please show this email when you pick up your yearbook.
+                        
+Purchaser Name (Last, First): {row["purchaser_name"]}
+Student Name: {row["first_name"]} {row["last_name"]}
+Student ID: {row["student_id"]}
+Package: {row["package"]}
+Amount Paid: {row["paid"]}
+Confirmation Tag: {row["confirmation"]}
+                        
+Thank you for purchasing a yearbook!""")
+        
+        # Send message
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+            
+            smtp.login(EMAIL, PASSWORD)
+            
+            smtp.send_message(msg)
+        
+        print("sent")
