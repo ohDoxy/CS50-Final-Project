@@ -50,16 +50,17 @@ CREATE TABLE customers (
     # Store data in SQL table
     for row in rows:
         
+        
         # Initialize variables
-        id = row["Student Id"].strip()
-        first_name = row["First Name"].strip()
-        last_name = row["Last Name"].strip()
-        confirmation = row["Confirmation"].strip()
-        package = row["Display Name"].strip()
-        paid = row["Amount Paid"].strip()
-        purchaser_name = row["Purchaser Name"].strip()
-        purchaser_email = row["Purchaser Email"].strip()
-        sale_date = row["Sale Date"].strip()
+        id = row.get("Student Id", "NULL").strip()
+        first_name = row.get("First Name", "NULL").strip()
+        last_name = row.get("Last Name", "NULL").strip()
+        confirmation = row.get("Confirmation", "NULL").strip()
+        package = row.get("Display Name", "NULL").strip()
+        paid = row.get("Amount Paid", "NULL").strip()
+        purchaser_name = row.get("Purchaser Name", "NULL").strip()
+        purchaser_email = row.get("Purchaser Email", "NULL").strip()
+        sale_date = row.get("Sale Date", "NULL").strip()
         
         db.execute("""INSERT INTO customers (student_id, first_name, last_name, confirmation, package, paid, purchaser_name,
                    purchaser_email, sale_date)

@@ -5,9 +5,30 @@
 {% endblock %}
 
 {% block main %}
-    <p>Click on "Choose File" and upload data as a CSV File.</p>
-    <form action="/upload" method="post">
-        <input type="file" name="file">
-        <button class="btn btn-primary" type="submit">Upload</button>
-    </form>
+
+<!-- <script>
+
+    function func() 
+    {
+        let img = document.querySelector("#loadingImage");
+
+        img.style.display = "block";
+    }
+
+</script> -->
+
+<p>
+ Click on "Choose File" and upload data as a
+ <u>
+  .CSV
+ </u>
+ file.
+</p>
+<form action="/upload" method="post">
+ <input accept=".csv" name="file" type="file"/>
+ <button class="btn btn-primary" type="submit" onclick="func()">
+  Upload
+ </button>
+</form>
+<!-- <div class="loader" id="loadingImage"></div> -->
 {% endblock %}

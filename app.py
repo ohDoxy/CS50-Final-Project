@@ -80,6 +80,8 @@ def login():
     else:
         return render_template("login.html")
     
+    
+    
 @app.route("/logout")
 def logout():
     """Log user out"""
@@ -89,6 +91,8 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
+
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -143,9 +147,31 @@ def register():
     # If get, return the template
     return render_template("register.html")
 
+
+
 @app.route("/upload", methods=["GET", "POST"])
 @login_required
 def upload():
     """ Accept a CSV file and upload data """
+    
+    if request.method == "POST":
+        
+        file = request.form.get("file")
+        
+        # Check if a file was submitted
+        if not file:
+            return apology("must include file")
+        
+        # See if type of file is csv
+        pos_of_dot = file.find('.')
+        filetype = file[pos_of_dot+1:]
+        
+        if filetype.lower() != "csv":
+            return apology("file must be csv")
+        
+        # Load file
+        load(file)
+        
+        return render_template("uploaded.html", file=file)
     
     return render_template("upload.html")
