@@ -8,4 +8,9 @@
     <div class="alert alert-success" role="alert">
         Successfully uploaded {{ file }}!
     </div>
+
+    <form action="/manage" method="get">
+        <button class="btn btn-primary" type="submit" name="action" value="change">Change File</button>
+        <button class="btn btn-primary" type="submit" name="action" value="send">Send QR Codes (via Email)</button>
+    </form>
 {% endblock %}

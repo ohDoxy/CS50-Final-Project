@@ -172,4 +172,18 @@ def upload():
         
         return render_template("uploaded.html", file=file)
     
-    return render_template("upload.html")
+    return render_template("uploaded.html")
+
+@app.route("/manage")
+@login_required
+def manage():
+    """ Perform action based on which button is pressed """
+    
+    action = request.args.get("action")
+    
+    if action == "change":
+        return redirect("/upload")
+    else:
+        pass
+    
+    return apology("TODO")

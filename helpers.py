@@ -1,7 +1,8 @@
 """ HELPER FUNCTIONS FOR MAIN """
 import os
-
 import csv
+import qrcode
+
 from cs50 import SQL
 from flask import redirect, session, render_template
 from functools import wraps
@@ -37,7 +38,8 @@ CREATE TABLE customers (
                 paid TEXT NOT NULL,        
                 purchaser_name TEXT NOT NULL, 
                 purchaser_email TEXT NOT NULL,
-                sale_date TEXT NOT NULL       
+                sale_date TEXT NOT NULL, 
+                qr_code TEXT      
         )
                """)
     db.execute("CREATE INDEX id ON customers (student_id)")
@@ -96,3 +98,7 @@ def apology(message, code=400):
             s = s.replace(old, new)
         return s
     return render_template("apology.html", top=code, bottom=escape(message)), code
+
+
+def generate_qr_codes():
+    pass
